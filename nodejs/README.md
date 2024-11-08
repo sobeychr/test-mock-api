@@ -1,11 +1,18 @@
 # Test-Mock-API
 
-## Setup
+### NPM Setup
 
 1. `nvm use` to use the recommended version of Node
 2. `npm i` to install packages
 3. `cp .env.development .env` to create your local environment file
 4. `npm run dev` to run the application
+
+### Docker Setup
+
+1. `docker compose build` to build the container
+2. `docker compose run web npm i` to install the NPM packages within the container
+3. `cp .env.development .env` to create your local environment file
+4. `docker compose up` to run the container
 
 ### Configs
 
