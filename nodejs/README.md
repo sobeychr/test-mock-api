@@ -1,4 +1,4 @@
-# Test-Mock-API
+# Test-Mock-API > NodeJS
 
 ### NPM Setup
 
@@ -22,7 +22,7 @@
 
 ### Custom routes
 
-1. Create `src/routes.dev.js` file, _src/dynamicRoutes.js_ should automatically include the file into the compiler
+1. Create `src/routes.dev.js` file, _src/dynamicRoutes.js_ should automatically include the file into the application
 2. Create a function with the ExpressJS application as a parameter
 3. Export your function
 4. Write your own endpoints
