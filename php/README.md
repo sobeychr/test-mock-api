@@ -14,7 +14,7 @@
 
 ### Custom routes
 
-1. Create `src/routes.dev.php` file, _src/dynamicRoutes.php_ should automatically include the file into the application
+1. Create `src/routes.dev.php` file, _src/index.php_ should automatically include the file into the application
 2. Write your own endpoints returning a Response from the _src/response.php_ file
 
 ```

@@ -55,8 +55,8 @@ You can store test files locally. It avoid having to hardcoded large among of da
 const readFile = require('../readFile');
 
 app.use('/test-load-file', (req, res) => {
-    const jsonData = readFile('some-big-data.json');
-    const htmlData = readFile('dir/subdirectory/lorem-ipsum.html');
+    const jsonData = readFile('some-big-data.json'); // 'true' by default, returns as JSON object
+    const htmlData = readFile('dir/subdirectory/lorem-ipsum.html', false); // 'false' to return as string
 });
 ```
 
