@@ -1,0 +1,16 @@
+services:
+  web:
+    image: php:8.3-cli
+    build:
+      context: .
+    working_dir: /home/app
+
+    env_file: .env
+    hostname: ${SERVER_HOST}
+    ports:
+      - $SERVER_PORT:$SERVER_PORT
+
+    volumes:
+      - .:/home/app
+
+    command: php -S ${SERVER_HOST}:${SERVER_PORT} src/index.php

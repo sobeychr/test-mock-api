@@ -1,0 +1,8 @@
+src/data/**/*
+!src/data/test-0.html
+!src/data/test-1.json
+
+src/logs/**/*
+src/routes/**/*
+
+src/routes.dev.php
