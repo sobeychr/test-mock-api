@@ -19,23 +19,20 @@ const onDynamic = app => {
     const dirName = 'src/routes/';
     const dirPath = resolve(process.cwd(), dirName);
     const hasDir = existsSync(dirPath);
-    if(hasDir) {
-        const dirFiles = readdirSync(dirPath);
-        const addedFiles = dirFiles.filter(filename => filename.endsWith('.js'))
-        
-        if(addedFiles.length > 0) {
-            console.log(`> adding ${addedFiles.length} custom files`);
+    const dirFiles = hasDir && readdirSync(dirPath) || [];
+    const addedFiles = dirFiles.filter(filename => filename.endsWith('.js'))
+    if(addedFiles.length > 0) {
+        console.log(`> adding ${addedFiles.length} custom files`);
 
-            addedFiles.map(filename => {
-                    const filePath = resolve(dirPath, filename);
-                    const fileRoutes = require(filePath);
-                    fileRoutes(app);
+        addedFiles.map(filename => {
+                const filePath = resolve(dirPath, filename);
+                const fileRoutes = require(filePath);
+                fileRoutes(app);
 
-                    console.log(`>> added ${dirName}${filename} to Mock-API`);
-                });
-        } else {
-            console.log(`> skipped ${dirName}`)
-        }
+                console.log(`>> added ${dirName}${filename} to Mock-API`);
+            });
+    } else {
+        console.log(`> skipped ${dirName}`)
     }
 };
 
