@@ -1,10 +1,15 @@
 <?php
 
+define('HEADERS', [
+    'json' => 'application/json',
+    'html' => 'text/html',
+]);
+define('HEADER_DEFAULT', 'text/plain');
+
 class App {
-    private $_getParams;
-    private $_postParams = [];
     private $_method;
     private $_protocol;
+    private $_start;
     private $_uri;
 
     public function __construct($server) {
@@ -12,48 +17,55 @@ class App {
         $this->_protocol = $server['SERVER_PROTOCOL'] ?? 'HTTP/1.0';
         $this->_uri = $server['PHP_SELF'];
 
-        $this->_getParams = isset($server['QUERY_STRING']) ? App::parseGet($server['QUERY_STRING']) : [];
+        $this->_start = microtime(true);
     }
 
-    private function getHeader($type) {
-        if ($type === 'json') {
-            return 'Content-Type: application/json; charset=utf-8';
-        } else if ($type === 'html') {
-            return 'Content-Type: text/html; charset=utf-8';
-        }
+    private function _closure() {
+        $end = microtime(true);
+        $delay = $end - $this->_start;
+        $duration = round($delay * 1000, 3);
 
-        return 'Content-Type: text/plain; charset=utf-8';
+        $data = $this->_method
+            . ' ' . $this->_uri
+            . ' ' . $duration
+            . 'ms';
+        $logger = new Logger($data);
+        $logger->write();
     }
 
-    private function method($method, $path, $handler) {
+    private function _getHeader($type) {
+        $header = HEADERS[$type] ?? HEADER_DEFAULT;
+        return 'Content-Type: ' . $header . '; charset=utf-8';
+    }
+
+    private function _method($method, $path, $handler) {
         if($method === null || $this->_method === $method) {
-            if($this->_uri === $path) {
+            if($path === null || $this->_uri === $path) {
                 $response = $handler();
 
                 header($this->_protocol . ' ' . $response->status);
-                header($this->getHeader($response->type));
+                header($this->_getHeader($response->type));
                 echo $response->body;
+
+                $this->_closure();
                 exit;
             }
         }
     }
 
+    public function error($handler) {
+        return $this->_method(null, null, $handler);
+    }
+
     public function get($path, $handler) {
-        return $this->method('GET', $path, $handler);
+        return $this->_method('GET', $path, $handler);
     }
 
     public function post($path, $handler) {
-        return $this->method('POST', $path, $handler);
+        return $this->_method('POST', $path, $handler);
     }
 
     public function use($path, $handler) {
-        return $this->method(null, $path, $handler);
-    }
-
-    static private function parseGet($string) {
-        $values = explode('&', $string);
-        $params = array_map(function($str){ [$key, $value] = explode('=', $str); return [$key => $value]; }, $values);
-
-        return array_merge(...$params);
+        return $this->_method(null, $path, $handler);
     }
 }
