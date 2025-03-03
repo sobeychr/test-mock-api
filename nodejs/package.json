@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "src/index.js",
   "scripts": {
-    "dev": "nodemon --env-file=.env src/index.js --config nodemon.config.json"
+    "dev": "nodemon -L --env-file=.env src/index.js --config nodemon.config.json"
   },
   "author": "",
   "license": "ISC",
